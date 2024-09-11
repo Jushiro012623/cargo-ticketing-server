@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('rolling_cargos', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger("ticket_id")->constrained()->cascadeOnDelete();
-            $table->unsignedBigInteger("cargo_fare_id")->constrained()->cascadeOnDelete();
+            $table->unsignedBigInteger("fare_id")->constrained()->cascadeOnDelete();
+            $table->string("weight");
             $table->string("vehicle_type");
-            $table->string("vehicle_model");
+            $table->string("plate_number");
             $table->timestamps();
         });
     }

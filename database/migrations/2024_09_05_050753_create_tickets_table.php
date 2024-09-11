@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id')->constrained()->cascadeOnDelete();
             $table->unsignedBigInteger('type_id')->constrained()->cascadeOnDelete();
-            $table->integer('ticket_number');
+            $table->bigInteger('ticket_number');
+            $table->bigInteger('voyage_number');
+            $table->bigInteger('transaction');
             $table->string('status');
             $table->timestamps();
         });
@@ -26,11 +28,11 @@ return new class extends Migration
             $table->timestamps();
         });
     }
-
+ 
     /**
      * Reverse the migrations.
      */
-    public function down(): void
+    public function down(): void 
     {
         Schema::dropIfExists('tickets');
         Schema::dropIfExists('booking_types');

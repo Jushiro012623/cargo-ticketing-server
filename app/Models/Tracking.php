@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Tracking extends Model
 {
     use HasFactory;
+
+    public function ticket(){
+        return $this->belongsTo(Ticket::class);
+    }
 }

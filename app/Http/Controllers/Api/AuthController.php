@@ -24,9 +24,14 @@ class AuthController extends Controller
         ];
         return $this->ok('Loggin Successfully', $userToken);
     }
+
     public function register(AuthRequests $request)
     {
         $registerUser = User::create($request->validated());
         return $this->success('Register Successfully', $registerUser, 201);
+    }
+    
+    public function logout(Request $request){
+        $request->user()->currentAccessToken()->delete();
     }
 }
