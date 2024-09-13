@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('fares', function (Blueprint $table) {
+        Schema::create('routes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger("route_id")->constrained()->cascadeOnDelete();
-            $table->unsignedBigInteger("type_id")->constrained()->cascadeOnDelete();
-            $table->string("additional_fee");
-            $table->string("discount");
-            $table->string("fare");
+            $table->string("destination");
+            $table->string("origin");
+            $table->string("transportation_type");
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('fares');
+        Schema::dropIfExists('routes');
     }
 };

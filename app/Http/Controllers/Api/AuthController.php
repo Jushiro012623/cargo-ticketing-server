@@ -16,7 +16,7 @@ class AuthController extends Controller
     {
         $login_user = Auth::attempt($request->only('email', 'password'));
         if (!$login_user) {
-            return $this->error('Unable to login. Please try again', 401 );
+            return $this->error('Invalid Credentials', 401 );
         }
         $user = User::firstWhere('email', $request->email);
         $userToken = [
@@ -30,7 +30,7 @@ class AuthController extends Controller
         $registerUser = User::create($request->validated());
         return $this->success('Register Successfully', $registerUser, 201);
     }
-    
+
     public function logout(Request $request){
         $request->user()->currentAccessToken()->delete();
     }

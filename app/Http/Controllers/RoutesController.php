@@ -1,20 +1,31 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\Fare;
+use App\Models\Route;
 use Illuminate\Http\Request;
 
-class FareController extends Controller
+class RoutesController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        
-        // return $query->get();
+        $query = Route::query();
+        if (!$request->has('transportation_type')) {
+            return $query->limit(4)->get();
+        }
+        return $query->where('transportation_type', $request->transportation_type)->get();
+
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
     }
 
     /**
@@ -29,6 +40,14 @@ class FareController extends Controller
      * Display the specified resource.
      */
     public function show(string $id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
     {
         //
     }

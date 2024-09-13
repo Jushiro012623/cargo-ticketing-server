@@ -15,16 +15,15 @@ class FareSeeder extends Seeder
     public function run(): void
     {
         $fares = [
-            ['additional_fee' => 'economy' ,'discount' => 'normal','origin' => 'San Jose' , 'destination' => 'Semirara', 'type_id' => 1,'fare' => '500',  'transportation_type' => 'out'],
-            ['additional_fee' => 'economy' ,'discount' => 'normal','origin' => 'San Jose' , 'destination' => 'Caluya', 'type_id' => 1,'fare' => '750', 'transportation_type' => 'out'],
-            ['additional_fee' => 'economy' ,'discount' => 'normal','origin' => 'San Jose' , 'destination' => 'Libertad', 'type_id' => 1,'fare' => '1060', 'transportation_type' => 'out'],
-            ['additional_fee' => 'economy' ,'discount' => 'normal','origin' => 'Caluya' , 'destination' => 'Libertad', 'type_id' => 1,'fare' => '700', 'transportation_type' => 'in'],
-            ['additional_fee' => 'economy' ,'discount' => 'normal','origin' => 'Semirara' , 'destination' => 'Caluya', 'type_id' => 1,'fare' => '375', 'transportation_type' => 'in'],
-            ['additional_fee' => 'economy' ,'discount' => 'normal','origin' => 'Semirara' , 'destination' => 'Libertad', 'type_id' => 1,'fare' => '900', 'transportation_type' => 'in'],
+            ['additional_fee' => 'economy', 'discount' => 'normal', 'fare' => '500', 'type_id' => 1,],
+            ['additional_fee' => 'economy', 'discount' => 'normal', 'type_id' => 1, 'fare' => '750',],
+            ['additional_fee' => 'economy', 'discount' => 'normal', 'type_id' => 1, 'fare' => '1060',],
+            ['additional_fee' => 'economy', 'discount' => 'normal', 'type_id' => 1, 'fare' => '700',],
+            ['additional_fee' => 'economy', 'discount' => 'normal', 'type_id' => 1, 'fare' => '375',],
+            ['additional_fee' => 'economy', 'discount' => 'normal', 'type_id' => 1, 'fare' => '900',],
         ];
         foreach ($fares as $fare) {
             Fare::factory()->create($fare);
         }
     }
 }
-
