@@ -19,6 +19,8 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'contact',
+        'address',
         'email',
         'password',
     ];
@@ -44,5 +46,9 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function ticket(){
+        return $this->hasMany(Ticket:: class);
     }
 }

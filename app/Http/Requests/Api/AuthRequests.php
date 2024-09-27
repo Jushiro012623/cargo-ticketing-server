@@ -25,13 +25,17 @@ class AuthRequests extends FormRequest
                 return [
                     'email' => 'required|email|string',
                     'password' => 'required|string|min:8',
+                    'remember' => 'nullable|boolean',
                 ];
             } elseif ($this->routeIs('register')) {
                 return [
                     'name' => 'required|string|max:255',
                     'email' => 'required|email|unique:users|string|max:255',
+                    'contact' => 'required|string|digits:11',
+                    'address' => 'required|string|max:255',
                     'password' => 'required|string|min:8|confirmed',
-                    'password_confirmation' => 'required|string|'
+                    'password_confirmation' => 'required|string|',
+                    'agree' => 'required|accepted|'
                 ];
             } else {
                 throw  new \Exception('Invalid method', 405);
