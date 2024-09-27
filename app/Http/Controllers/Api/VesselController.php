@@ -1,31 +1,22 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Models\Route;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\Api\VesselResource;
+use App\Models\Vessel;
 use Illuminate\Http\Request;
 
-class RoutesController extends Controller
+class VesselController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $query = Route::query();
-        if (!$request->has('transportation_type')) {
-            return $query->limit(4)->get();
-        }
-        return $query->where('transportation_type', $request->transportation_type)->get();
-
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $vessels = Vessel::all();
+        $response = VesselResource::collection($vessels);
+        return $response;
     }
 
     /**
@@ -40,14 +31,6 @@ class RoutesController extends Controller
      * Display the specified resource.
      */
     public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
     {
         //
     }

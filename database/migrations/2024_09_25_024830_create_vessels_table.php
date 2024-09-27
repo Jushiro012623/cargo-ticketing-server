@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('rolling_cargos', function (Blueprint $table) {
+        Schema::create('vessels', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger("ticket_id")->constrained()->cascadeOnDelete();
-            $table->string("vehicle_type");
-            $table->string("plate_number");
-            $table->unsignedBigInteger("route_id")->constrained()->cascadeOnDelete();
-            $table->string("weight");
+            $table->string('name');
+            $table->string('description');
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('rolling_cargos');
+        Schema::dropIfExists('vessels');
     }
 };

@@ -16,11 +16,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             // FareSeeder::class,
             RouteSeeder::class,
+            VesselSeeder::class,
         ]);
         // User::factory(10)->create();
-
-
-
         User::factory()->create([
             'name' => 'Test User',
             'contact' => '09125279754',

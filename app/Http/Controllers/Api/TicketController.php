@@ -16,6 +16,7 @@ class TicketController extends Controller
      * Display a listing of the resource.
      */
     private $ticket_fare;
+    
     public function __construct()
     {
         $this->ticket_fare = new TicketService();
