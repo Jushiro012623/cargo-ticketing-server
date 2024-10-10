@@ -12,14 +12,22 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('payments', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger("ticket_id")->constrained()->cascadeOnDelete();
-            $table->unsignedBigInteger("payment_method_id")->constrained()->cascadeOnDelete();
-            $table->string("status");
-            $table->integer("amount");
-            $table->integer("total_amount");
-            $table->integer("additional_fee");
+            $table->id(); // Primary key
+            $table->unsignedBigInteger("ticket_id")->constrained()->cascadeOnDelete(); // Foreign key
+            $table->unsignedBigInteger("payment_method_id")->constrained()->cascadeOnDelete(); 
+
+            // Payment details
+            $table->decimal("amount", 10, 2); 
+            $table->decimal("total_amount", 10, 2);
+            $table->decimal("additional_fee", 10, 2);
             $table->string("transaction_code");
+
+            $table->string('payment_status', 105)->default(2)->comment('0 -> Paid, 1 -> Pending, 2 -> Failed');
+        
+            // Payment date
+            $table->dateTime("payment_date")->nullable();
+        
+            $table->softDeletes();
             $table->timestamps();
         });
     }

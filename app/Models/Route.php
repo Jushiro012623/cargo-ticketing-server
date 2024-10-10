@@ -12,4 +12,7 @@ class Route extends Model
     protected $fillable =[
         'origin', 'destination', 'transportation_type'
     ];
+    public function fare(){
+        return $this->hasMany(Fare::class);
+    }
 }

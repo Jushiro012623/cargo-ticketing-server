@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('passengers', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger("ticket_id")->constrained()->cascadeOnDelete();
-            $table->unsignedBigInteger("route_id")->constrained()->cascadeOnDelete();
-            $table->string("full_name");
+            $table->string("discount");
+            $table->boolean("additional");
             $table->timestamps();
         });
     }

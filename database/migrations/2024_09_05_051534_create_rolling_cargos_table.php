@@ -16,7 +16,6 @@ return new class extends Migration
             $table->unsignedBigInteger("ticket_id")->constrained()->cascadeOnDelete();
             $table->string("vehicle_type");
             $table->string("plate_number");
-            $table->unsignedBigInteger("route_id")->constrained()->cascadeOnDelete();
             $table->string("weight");
             $table->timestamps();
         });

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\PaymentMethods;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -14,7 +15,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     { 
         $this->call([
-            // FareSeeder::class,
+            FareSeeder::class,
             RouteSeeder::class,
             VesselSeeder::class,
         ]);
@@ -27,5 +28,20 @@ class DatabaseSeeder extends Seeder
             'address' => 'Tondo, Manila, Metro-Manila',
             'email' => 'test@example.com',
         ]);
+        PaymentMethods::factory()->create([
+            'name' => 'VSPayLater',
+        ]);
+        PaymentMethods::factory()->create([
+            'name' => 'Debit/Credit Card',
+        ]);
+        PaymentMethods::factory()->create([
+            'name' => 'Cash',
+        ]);
+        PaymentMethods::factory()->create([
+            'name' => 'E-Money',
+        ]);
+
+
+        
     }
 }

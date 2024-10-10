@@ -12,16 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tickets', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('user_id')->constrained()->cascadeOnDelete();
-            $table->unsignedBigInteger('type_id')->constrained()->cascadeOnDelete();
-            $table->bigInteger('ticket_number');
-            $table->bigInteger('voyage_number');
-            $table->bigInteger('transaction');
-            $table->string('status');
-            $table->timestamps();
+            $table->id(); // Primary key
+            $table->unsignedBigInteger('user_id')->constrained()->cascadeOnDelete(); // Foreign key
+            $table->unsignedBigInteger('type_id')->constrained()->cascadeOnDelete(); // Foreign key
+            $table->unsignedBigInteger('vessel_id')->constrained()->cascadeOnDelete(); // Foreign key
+            $table->unsignedBigInteger("fare_id")->constrained()->cascadeOnDelete(); // Foreign key
+
+            // Ticket attributes
+            $table->bigInteger('ticket_number')->unique(); // Ensure uniqueness
+            $table->bigInteger('voyage_number'); // Consider unique if necessary
+
+            $table->string('status', 105)->default(2)->comment('0 -> Complete, 1 -> Pending, 2 -> InTransit, 3 -> Canceled');
+            $table->softDeletes();
+            $table->timestamps(); 
         });
-         
         Schema::create('booking_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');

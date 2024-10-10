@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('drop_cargos', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger("ticket_id")->constrained()->cascadeOnDelete();
-            $table->unsignedBigInteger("route_id")->constrained()->cascadeOnDelete();
             $table->text("cargo_description");
             $table->string("weight");
             $table->string("item_name");

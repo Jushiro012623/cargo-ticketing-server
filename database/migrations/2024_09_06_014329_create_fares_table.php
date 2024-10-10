@@ -14,10 +14,14 @@ return new class extends Migration
         Schema::create('fares', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger("route_id")->constrained()->cascadeOnDelete();
-            $table->unsignedBigInteger("type_id")->constrained()->cascadeOnDelete();
-            $table->string("additional_fee");
-            $table->string("discount");
-            $table->string("fare");
+            $table->unsignedBigInteger("type_id")->nullable();
+            $table->string("regular");
+            $table->string("student")->nullable();
+            $table->string("pwd_senior")->nullable();
+            $table->string("half_fare")->nullable();
+            $table->string("minor")->nullable();
+            $table->string("length")->nullable();
+            $table->string("additional_fee")->nullable();
             $table->timestamps();
         });
     }
