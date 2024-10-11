@@ -13,11 +13,4 @@ class RollingCargo extends Model
     {
         return $this->belongsTo(Ticket::class);
     }
-    public function fare()
-    {
-        return $this->hasOne(Fare::class);
-    }
-    public function route(){
-        return $this->hasOne(Route::class);
-    }
 }

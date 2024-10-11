@@ -13,6 +13,7 @@ class Route extends Model
         'origin', 'destination', 'transportation_type'
     ];
     public function fare(){
-        return $this->hasMany(Fare::class);
+        return $this->hasOne(Fare::class);
     }
+   
 }

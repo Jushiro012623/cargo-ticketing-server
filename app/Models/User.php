@@ -23,6 +23,7 @@ class User extends Authenticatable
         'address',
         'email',
         'password',
+        'user_role_id'
     ];
 
     /**
@@ -50,5 +51,8 @@ class User extends Authenticatable
 
     public function ticket(){
         return $this->hasMany(Ticket:: class);
+    }
+    public function role(){
+        return $this->belongsTo(Role:: class);
     }
 }

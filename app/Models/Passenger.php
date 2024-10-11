@@ -12,10 +12,4 @@ class Passenger extends Model
     public function ticket(){
         return $this->belongsTo(Ticket::class);
     }
-    public function fare(){
-        return $this->belongsTo(Fare::class);
-    }
-    public function route(){
-        return $this->hasOne(Route::class);
-    }
 }

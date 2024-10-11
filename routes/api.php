@@ -13,16 +13,15 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::group(['controller' => AuthController::class], function (){
-    Route::post('/login', 'login')->name('login');
-    Route::post('/register', 'register')->name('register');
-    Route::post('/logout', 'logout')->name('logout');
+    Route::post('/login', 'login')->name('login')->middleware('guest:sanctum');
+    Route::post('/register', 'register')->name('register')->middleware('guest:sanctum');
+    Route::post('/logout', 'logout')->name('logout')->middleware('auth:sanctum');
 });
 
-Route::apiResource('/route',RoutesController::class);
-Route::apiResource('/vessel',VesselController::class);
+Route::apiResource('/route',RoutesController::class)->middleware('auth:sanctum');
+Route::apiResource('/vessel',VesselController::class)->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum')->group(function () {
-    
     Route::prefix('ticket/trashed')->group(function () {
         Route::get('', [TicketController::class, 'trashed'])->name('ticket.trashed');
         Route::post('/restore/{ticket}', [TicketController::class, 'restore'])->name('ticket.trashed.restore');

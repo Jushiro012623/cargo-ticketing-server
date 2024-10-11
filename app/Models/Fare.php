@@ -12,11 +12,11 @@ class Fare extends Model
     protected $fillable = ['fare', 'type_id', 'route_id', 'discount', 'additional_fee'];
     public function route()
     {
-    return $this->belongsTo(Route::class);
+        return $this->belongsTo(Route::class);
     }
 
     public function tickets()
     {
-        return $this->hasMany(Ticket::class);
+        return $this->hasOne(Ticket::class);
     }
 }

@@ -20,13 +20,19 @@ class TransactionResource extends JsonResource
         return [
             'type' => 'Ticket',
             'id' => $this->id,
+            'user_id' =>$this->user_id,
+            'owner' => $this->whenLoaded('user', function () {
+                    return $this->user;
+                }),
             'vessel_type' => $this->vessel->name ?? null,
             'attributes' => [
                 'ticket_number' => $this->ticket_number,
                 'voyage_number' => $this->voyage_number,
                 'transaction '=> $ticketDetails ?? null,
                 'routes' => new RouteResource($this->fare->route),
-                'payment' => new PaymentResource($this->whenLoaded('payment')),
+                'payment' => $this->whenLoaded('payment', function () {
+                    return new PaymentResource($this->payment);
+                }),
                 'timestamp' => [
                     'created' => $this->created_at->format('Y-m-d : h:i:A'),
                     'updated' => $this->updated_at->format('Y-m-d : h:i:A'),
