@@ -11,4 +11,7 @@ class Vessel extends Model
 
     protected $fillable = ['name', 'description'];
 
+    public function tickets(){
+        return $this->hasOne(Ticket::class);
+    }
 }

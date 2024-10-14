@@ -26,6 +26,7 @@ class TicketController extends Controller
     }
     public function index(TicketRequest $request)
     {
+        Gate::authorize('viewAny', Ticket::class);
         $tickets = Ticket::with(['payment', 'fare.route', 'fare', 'user'])->paginate(10);
         $tickets_resource = TransactionResource::collection($tickets);
         return response()->json($tickets_resource->response()->getData());
@@ -33,22 +34,24 @@ class TicketController extends Controller
     public function store(TicketRequest $request)
     {
         try {
+            // dd($request->all());
+            Gate::authorize('create', Ticket::class);
             DB::beginTransaction();
-                $ticket_fare = $this->ticketService->getTicketFare($request);
-                $ticket = Ticket::create(array_merge(
-                    [
-                        'user_id' =>  $request->user()->id,
-                        'fare_id' =>  $ticket_fare->id,
-                        'ticket_number' => mt_rand(10000000, 9999999999),
-                        'status' => 'pending', # 'in_transit', 'completed', 'cancelled'
-                        'voyage_number' => mt_rand(1000, 999999),
-                    ],
-                    $request->validated(),
-                ));
-                $this->ticketService->createTransactionType($request, $ticket->id);
-                $this->paymentService->storePayment($ticket, $request);
+            $ticket_fare = $this->ticketService->getTicketFare($request);
+            $ticket = Ticket::create(array_merge(
+                [
+                    'user_id' =>  $request->user()->id,
+                    'fare_id' =>  $ticket_fare->id,
+                    'ticket_number' => mt_rand(10000000, 9999999999),
+                    'status' => 'pending', # 'in_transit', 'completed', 'cancelled'
+                    'voyage_number' => mt_rand(1000, 999999),
+                ],
+                $request->validated(),
+            ));
+            $this->ticketService->createTransactionType($request, $ticket->id);
+            $this->paymentService->storePayment($ticket, $request);
             DB::commit();
-                $ticket_resource = new TransactionResource($ticket->load(['payment']));
+            $ticket_resource = new TransactionResource($ticket->load(['payment']));
             return $this->success('Ticket created successfully', $ticket_resource, 201);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -63,15 +66,18 @@ class TicketController extends Controller
     }
     public function update(TicketRequest $request, Ticket $ticket)
     {
+        Gate::authorize('update', $ticket);
         return $this->ticketService->updateTicket($request,$ticket);
     }
     public function replace(TicketRequest $request, Ticket $ticket)
     {
+        Gate::authorize('replace', $ticket);
         return $this->ticketService->updateTicket($request,$ticket);
     }
 
     public function destroy(Request $request, Ticket $ticket)
     {
+        Gate::authorize('delete', $ticket);
         $ticket->delete();
         return response()->json([
             'message' => 'Ticket deleted successfully',
@@ -79,6 +85,7 @@ class TicketController extends Controller
     }
     public function trashed()
     {
+        Gate::authorize('viewTrashed', Ticket::class);
         $trashed_tickets = Ticket::onlyTrashed()->paginate(15);
         if ($trashed_tickets->isEmpty()) {
             return response()->json(['message' => 'No trashed tickets found.'], 404);
@@ -89,6 +96,7 @@ class TicketController extends Controller
 
     public function restore(string $ticket)
     {
+        Gate::authorize('restore', Ticket::class);
         $deleted_ticket = Ticket::withTrashed()->find($ticket);
         if ($deleted_ticket) {
             $deleted_ticket->restore();

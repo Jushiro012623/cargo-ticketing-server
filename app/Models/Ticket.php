@@ -35,7 +35,7 @@ class Ticket extends Model
         return $this->hasOne(Tracking::class);
     }
     public function vessel(){
-        return $this->hasOne(Vessel::class);
+        return $this->belongsTo(Vessel::class);
     }
     public function fare()
     {

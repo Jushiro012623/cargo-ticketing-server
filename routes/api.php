@@ -18,8 +18,8 @@ Route::group(['controller' => AuthController::class], function (){
     Route::post('/logout', 'logout')->name('logout')->middleware('auth:sanctum');
 });
 
-Route::apiResource('/route',RoutesController::class)->middleware('auth:sanctum');
-Route::apiResource('/vessel',VesselController::class)->middleware('auth:sanctum');
+Route::apiResource('/route',RoutesController::class);//->middleware('auth:sanctum');
+Route::apiResource('/vessel',VesselController::class);//->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('ticket/trashed')->group(function () {

@@ -6,38 +6,55 @@ use App\Models\User;
 
 final class Abilities
 {
-    public const CreateTicket = 'ticket:create'; // user 
-    public const UpdateTicket = 'ticket:update'; // manager / admim
-    public const ReplaceTicket = 'ticket:replace'; // manager / admim
-    public const DeleteTicket = 'ticket:delete'; // manager / admim
-    public const RestoreTicket = 'ticket:restore'; // admim
-    public const ViewTrashedTicket = 'ticket:view:trashed'; // admim
 
-    public const UpdateOwnTicket = 'ticket:own:update'; //user
-    public const DeleteOwnTicket = 'ticket:own:delete'; //user
+    //user 
+    public const CreateOwnTicket = 'create:own:ticket';
+    public const ViewOwnTicket = 'view:own:ticket';
+    public const UpdateOwnTicket = 'update:own:ticket';
+    public const CancelOwnTicket = 'cancel:own:ticket';
+    public const DeleteOwnTicket = 'delete:own:ticket';
 
-    public const CreateUser = 'user:create'; // administrator / manager
-    public const UpdateUser = 'user:update'; // administrator / manager
-    public const ReplaceUser = 'user:replace'; // administrator / manager
-    public const DeleteUser = 'user:delete'; // administrator / manager
+    //receiver 
+    // public const CancelUserTicket = 'cancel:user:ticket';
 
-
+    //admin
+    public const CreateUser = 'create:user';
+    public const DeleteUser = 'delete:user';
+    public const ViewAllUser = 'view:all:user';
+    public const ViewUser = 'view:user';
+    public const ViewAllUserTicket = 'view:all:user:ticket';
+    // public const ReplaceUserTicket = 'replace:user:ticket';
+    public const UpdateUserTicket = 'update:user:ticket';
+    public const DeleteUserTicket = 'delete:user:ticket';
+    public const ViewTrashedTicket = 'view:trashed:ticket';
+    public const RestoreTrashedTicket = 'restore:trashed:ticket';
+    
     public static function getAbilities(User $user)
     {
-        if ($user->user_role_id === 2) {
+        // dd($user->user_role_id);
+        if ($user->user_role_id === 2) { //receiver
             return [
-                self::UpdateTicket,
-                self::ReplaceTicket,
-                self::DeleteTicket,
-                self::RestoreTicket,
+                self::UpdateUserTicket,
+                // self::CancelUserTicket,
             ];
-        } elseif($user->user_role_id === 3) {
-            return ['*'];
+        } elseif($user->user_role_id === 3) { //admin
+            return [
+                self::CreateUser,
+                self::DeleteUser,
+                self::ViewAllUser,
+                self::ViewUser,
+                self::ViewAllUserTicket,
+                self::DeleteUserTicket,
+                self::ViewTrashedTicket,
+                self::RestoreTrashedTicket,
+            ];
         }
         else {
             return [
-                self::CreateTicket, 
+                self::CreateOwnTicket, 
+                self::ViewOwnTicket,
                 self::UpdateOwnTicket,
+                self::CancelOwnTicket,
                 self::DeleteOwnTicket,
             ];
         }
