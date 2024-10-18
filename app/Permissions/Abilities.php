@@ -6,7 +6,6 @@ use App\Models\User;
 
 final class Abilities
 {
-
     //user 
     public const CreateOwnTicket = 'create:own:ticket';
     public const ViewOwnTicket = 'view:own:ticket';
@@ -16,7 +15,7 @@ final class Abilities
 
     //receiver 
     // public const CancelUserTicket = 'cancel:user:ticket';
-
+    
     //admin
     public const CreateUser = 'create:user';
     public const DeleteUser = 'delete:user';

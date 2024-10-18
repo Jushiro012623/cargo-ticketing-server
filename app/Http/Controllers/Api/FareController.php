@@ -13,7 +13,24 @@ class FareController extends Controller
      */
     public function index(Request $request)
     {
-        
+        // $fares = Fare::all();
+        // $routes = $fares->pluck('route'); // Assuming 'route' is a column in your fares table
+        // return $routes;
+        $query = Fare::with('route');
+        if ($request->has('transportation_type')) {
+            $query->whereHas('route', function($query) use ($request) {
+                $query->where('transportation_type', $request->transportation_type);
+            });
+        }
+        $routes = $query->limit(4)->get();
+        return $routes;
+
+        // $response = RouteResource::collection($routes);
+        // return $response;
+
+        $fare = Fare::with('route')->get();
+        return $fare;
+
         // return $query->get();
     }
 

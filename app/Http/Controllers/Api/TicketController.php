@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\TicketRequest;
 use App\Http\Resources\Api\TransactionResource;
+use App\Models\Fare;
+use App\Models\Route;
 use App\Models\Ticket;
 use App\Services\PaymentService;
 use Illuminate\Http\Request;
@@ -103,5 +105,39 @@ class TicketController extends Controller
             return $this->ok('Trashed Ticket restored successfully', new TransactionResource($deleted_ticket));
         }
         return $this->error('Ticket not found', 404);
+    }
+
+    public function review(TicketRequest $request){
+        $fare = Fare::query();
+        if ($request->type_id === '2'){
+            $fare = $fare->where('route_id', $request->route_id)
+            ->where('type_id', $request->type_id)
+            ->where('length', $request->weight)
+            ->first();
+            $discount = 'regular';
+        }else{
+            $fare = $fare->where('route_id', $request->route_id)
+            ->where('type_id', $request->type_id)
+            ->first();
+            $discount = $request->discount;
+        }
+            
+        return response()->json([
+            'message' => 'Ticket Fare',
+            'data' => [
+                'base_fare' => $fare->regular,
+                'discount' => $request->discount,
+                'additional_fee' => $fare->additional_fee,
+                'discount_fare' => $fare->$discount
+            ],
+            // 'route' => [
+            //     'origin' => $fare->route->origin,
+            //     'destination' => $fare->route->destination,
+            //     'transportation_type' => $fare->route->transportation_type,
+            // ],
+            // 'discount' => $request->discount ?? null,
+            // 'total_amount' => $fare->$discount
+        ],200);
+
     }
 }

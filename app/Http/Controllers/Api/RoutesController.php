@@ -21,7 +21,6 @@ class RoutesController extends Controller
         $routes = $query->limit(4)->get();
         $response = RouteResource::collection($routes);
         return $response;
-
     }
 
     /**

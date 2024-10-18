@@ -61,7 +61,6 @@ class TicketPolicy
     {
         if($user->tokenCan(Abilities::DeleteUserTicket)){
             return true;
-            
         } else if($user->tokenCan(Abilities::DeleteOwnTicket)){
             return $user->id === $ticket->user_id;
         }
