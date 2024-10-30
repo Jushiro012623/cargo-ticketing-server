@@ -5,33 +5,50 @@ namespace App\Services;
 use App\Models\Payment;
 use Carbon\Carbon;
 
-class PaymentService {
-    public function storePayment($ticket, $request) {
-        $discount = $ticket->fare->regular;
-            if($request->type_id === 1){
-                switch ($ticket->passenger->discount) {
-                    case 'regular':
-                        $discount = $ticket->fare->regular;
-                    case 'student':
-                        $discount = $ticket->fare->student;
-                    case 'pwd_senior':
-                        $discount = $ticket->fare->pwd_senior;
-                    case 'minor':
-                        $discount = $ticket->fare->minor;
-                    case 'half_fare':
-                        $discount = $ticket->fare->half_fare;
-                    default:
-                        $discount = 'Invalid Discount';
-                }
+class PaymentService
+{
+    public function storePayment($ticket, $request)
+    {
+        $discount = $ticket->fare->regular; // Default value
+
+        if ($request->type_id === 1) {
+            switch ($ticket->passenger->discount) {
+                case 'regular':
+                    $discount = $ticket->fare->regular;
+                    break;
+                case 'student':
+                    $discount = $ticket->fare->student;
+                    break;
+                case 'pwd_senior':
+                    $discount = $ticket->fare->pwd_senior;
+                    break;
+                case 'minor':
+                    $discount = $ticket->fare->minor;
+                    break;
+                case 'half_fare':
+                    $discount = $ticket->fare->half_fare;
+                    break;
+                default:
+                    // Handle the invalid discount case
+                    $discount = 0; // Set to 0 or an appropriate value instead of a string
+                    break;
             }
+        }
+
+        $additional_fee = $request->additional ? $ticket->fare->additional_fee : 0;
+
+        // Ensure all values are numeric
+        $total_amount = (float)$discount + (float)$additional_fee;
+
         $payment_info = Payment::create([
             'ticket_id' => $ticket->id,
             'amount' => $ticket->fare->regular,
             'transaction_code' => "VSL" . mt_rand(100000, 9999999999),
-            'additional_fee' => $request->additional ? $ticket->fare->additional_fee : 0 ,
-            'total_amount' =>  $discount + ( $request->additional ? $ticket->fare->additional_fee : 0),
+            'additional_fee' => $additional_fee,
+            'total_amount' => $total_amount,
             'payment_method_id' => $request->payment_method_id,
         ]);
+
         return $payment_info;
     }
 }

@@ -23,7 +23,7 @@ Route::apiResource('/route',RoutesController::class);//->middleware('auth:sanctu
 Route::apiResource('/vessel',VesselController::class);//->middleware('auth:sanctum');
 Route::apiResource('/fare',FareController::class);//->middleware('auth:sanctum');
 
-Route::middleware('auth:sanctum')->group(function () {
+// Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('ticket/trashed')->group(function () {
         Route::get('', [TicketController::class, 'trashed'])->name('ticket.trashed');
         Route::post('/restore/{ticket}', [TicketController::class, 'restore'])->name('ticket.trashed.restore');
@@ -32,7 +32,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('ticket', TicketController::class)->names('ticket');
     Route::put('/ticket/{ticket}',[TicketController::class, 'replace'])->name('ticket.replace');
 
-});
+// });
 
 
 

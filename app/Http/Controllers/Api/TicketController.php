@@ -36,13 +36,14 @@ class TicketController extends Controller
     public function store(TicketRequest $request)
     {
         try {
-            // dd($request->all());
-            Gate::authorize('create', Ticket::class);
+            // dd($request->);
+            // Gate::authorize('create', Ticket::class); )
             DB::beginTransaction();
             $ticket_fare = $this->ticketService->getTicketFare($request);
             $ticket = Ticket::create(array_merge(
                 [
-                    'user_id' =>  $request->user()->id,
+                    // 'user_id' =>  $request->user()->id,
+                    'user_id' =>  '1',
                     'fare_id' =>  $ticket_fare->id,
                     'ticket_number' => mt_rand(10000000, 9999999999),
                     'status' => 'pending', # 'in_transit', 'completed', 'cancelled'
@@ -121,14 +122,15 @@ class TicketController extends Controller
             ->first();
             $discount = $request->discount;
         }
-            
+        // dd($fare);
         return response()->json([
             'message' => 'Ticket Fare',
             'data' => [
-                'base_fare' => $fare->regular,
+                'base_fare' => (int) $fare->regular,
                 'discount' => $request->discount,
-                'additional_fee' => $fare->additional_fee,
-                'discount_fare' => $fare->$discount
+                'additional_fee' => (int) $fare->additional_fee,
+                'discounted_fare' => (int) $fare->$discount,
+                'total_amount'=> (int) $fare->$discount + $fare->additional_fee ?? 0,
             ],
             // 'route' => [
             //     'origin' => $fare->route->origin,
