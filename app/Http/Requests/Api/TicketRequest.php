@@ -61,7 +61,7 @@ class TicketRequest extends FormRequest
         switch ($type_id) {
             case 1: // Passenger
                 $rules['discount'] = 'required|string';
-                $rules['additional'] = 'required|boolean';
+                $rules['additional'] = 'required|in:1,2';
                 break;
             case 2: // Rolling Cargo
                 $rules['vehicle_type'] = 'required|string';

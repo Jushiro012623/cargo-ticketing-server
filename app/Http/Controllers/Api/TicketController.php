@@ -40,10 +40,12 @@ class TicketController extends Controller
             // Gate::authorize('create', Ticket::class); )
             DB::beginTransaction();
             $ticket_fare = $this->ticketService->getTicketFare($request);
+            // dd($request->user());
             $ticket = Ticket::create(array_merge(
+
                 [
-                    // 'user_id' =>  $request->user()->id,
-                    'user_id' =>  '1',
+                    'user_id' =>  $request->user()->id,
+                    // 'user_id' =>  '1',
                     'fare_id' =>  $ticket_fare->id,
                     'ticket_number' => mt_rand(10000000, 9999999999),
                     'status' => 'pending', # 'in_transit', 'completed', 'cancelled'
@@ -52,7 +54,7 @@ class TicketController extends Controller
                 $request->validated(),
             ));
             $this->ticketService->createTransactionType($request, $ticket->id);
-            $this->paymentService->storePayment($ticket, $request);
+            // $this->paymentService->storePayment($ticket, $request);
             DB::commit();
             $ticket_resource = new TransactionResource($ticket->load(['payment']));
             return $this->success('Ticket created successfully', $ticket_resource, 201);
@@ -63,9 +65,9 @@ class TicketController extends Controller
     }
     public function show(Ticket $ticket)
     {
-        Gate::authorize('view', $ticket);
+        // Gate::authorize('view', $ticket);
         $ticket_resource = new TransactionResource($ticket->load(['payment','user']));
-        return $this->ok('Ticket retrieved successfully', $ticket_resource,);
+        return $this->ok('Ticket retrieved successfully', $ticket_resource);
     }
     public function update(TicketRequest $request, Ticket $ticket)
     {

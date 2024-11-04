@@ -30,9 +30,9 @@ class TransactionResource extends JsonResource
                 'voyage_number' => $this->voyage_number,
                 'transaction '=> $ticketDetails ?? null,
                 'routes' => new RouteResource($this->fare->route),
-                'payment' => $this->whenLoaded('payment', function () {
-                    return new PaymentResource($this->payment);
-                }),
+                // 'payment' => $this->whenLoaded('payment', function () {
+                //     return new PaymentResource($this->payment);
+                // }),
                 'timestamp' => [
                     'created' => $this->created_at->format('Y-m-d : h:i:A'),
                     'updated' => $this->updated_at->format('Y-m-d : h:i:A'),
