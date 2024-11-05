@@ -28,8 +28,13 @@ class TicketController extends Controller
     }
     public function index(TicketRequest $request)
     {
-        Gate::authorize('viewAny', Ticket::class);
-        $tickets = Ticket::with(['payment', 'fare.route', 'fare', 'user'])->paginate(10);
+        // Gate::authorize('viewAny', Ticket::class);
+        // $tickets = Ticket::with(['payment', 'fare.route', 'fare', 'user'])->paginate(10);
+        // $tickets_resource = TransactionResource::collection($tickets);
+        // return response()->json($tickets_resource->response()->getData());
+        $tickets = Ticket::where('user_id', $request->user()->id)->with(['payment', 'fare.route', 'fare'])->paginate(10);
+        // dd($request->user()->id);
+        // dd($tickets);
         $tickets_resource = TransactionResource::collection($tickets);
         return response()->json($tickets_resource->response()->getData());
     }
@@ -111,37 +116,6 @@ class TicketController extends Controller
     }
 
     public function review(TicketRequest $request){
-        $fare = Fare::query();
-        if ($request->type_id === '2'){
-            $fare = $fare->where('route_id', $request->route_id)
-            ->where('type_id', $request->type_id)
-            ->where('length', $request->weight)
-            ->first();
-            $discount = 'regular';
-        }else{
-            $fare = $fare->where('route_id', $request->route_id)
-            ->where('type_id', $request->type_id)
-            ->first();
-            $discount = $request->discount;
-        }
-        // dd($fare);
-        return response()->json([
-            'message' => 'Ticket Fare',
-            'data' => [
-                'base_fare' => (int) $fare->regular,
-                'discount' => $request->discount,
-                'additional_fee' => (int) $fare->additional_fee,
-                'discounted_fare' => (int) $fare->$discount,
-                'total_amount'=> (int) $fare->$discount + $fare->additional_fee ?? 0,
-            ],
-            // 'route' => [
-            //     'origin' => $fare->route->origin,
-            //     'destination' => $fare->route->destination,
-            //     'transportation_type' => $fare->route->transportation_type,
-            // ],
-            // 'discount' => $request->discount ?? null,
-            // 'total_amount' => $fare->$discount
-        ],200);
 
     }
 }
