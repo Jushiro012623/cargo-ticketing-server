@@ -31,12 +31,12 @@ final class Abilities
     public static function getAbilities(User $user)
     {
         // dd($user->user_role_id);
-        if ($user->user_role_id === 2) { //receiver
+        if ($user->user_role_id === 3) { //receiver
             return [
                 self::UpdateUserTicket,
                 // self::CancelUserTicket,
             ];
-        } elseif($user->user_role_id === 3) { //admin
+        } elseif($user->user_role_id === 2) { //admin
             return [
                 self::CreateUser,
                 self::DeleteUser,

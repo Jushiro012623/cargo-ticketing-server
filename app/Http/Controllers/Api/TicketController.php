@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\TicketRequest;
 use App\Http\Resources\Api\TransactionResource;
+use App\Mail\Booked;
 use App\Models\Fare;
+use App\Models\Payment;
 use App\Models\Route;
 use App\Models\Ticket;
 use App\Services\PaymentService;
@@ -14,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use App\Services\TicketService;
 use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Mail;
 
 class TicketController extends Controller
 {
@@ -59,9 +62,12 @@ class TicketController extends Controller
                 $request->validated(),
             ));
             $this->ticketService->createTransactionType($request, $ticket->id);
-            // $this->paymentService->storePayment($ticket, $request);
+            $payment_id = $this->paymentService->storePayment($ticket, $request);
+            $payment = Payment::findOrFail($payment_id->id);
+            Mail::to('ivanallen64@gmail.com')->send(new Booked($request->user(), $payment));
             DB::commit();
             $ticket_resource = new TransactionResource($ticket->load(['payment']));
+
             return $this->success('Ticket created successfully', $ticket_resource, 201);
         } catch (\Exception $e) {
             DB::rollBack();

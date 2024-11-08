@@ -46,7 +46,7 @@ class PaymentService
             'transaction_code' => "VSL" . mt_rand(100000, 9999999999),
             'additional_fee' => $additional_fee,
             'total_amount' => $total_amount,
-            'payment_method_id' => $request->payment_method_id,
+            'payment_method_id' => 1
         ]);
 
         return $payment_info;
