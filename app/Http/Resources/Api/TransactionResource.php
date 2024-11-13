@@ -25,21 +25,23 @@ class TransactionResource extends JsonResource
                     return $this->user;
                 }),
             'vessel_type' => $this->vessel->name ?? null,
+            'transaction '=> $ticketDetails ?? null,
             'attributes' => [
+                'discount' => $this->discount_id,
                 'ticket_number' => $this->ticket_number,
                 'voyage_number' => $this->voyage_number,
-                'transaction '=> $ticketDetails ?? null,
                 'routes' => new RouteResource($this->fare->route),
-                'payment' => $this->whenLoaded('payment', function () {
-                    return new PaymentResource($this->payment);
-                }),
-                'timestamp' => [
-                    'created' => $this->created_at->format('Y-m-d : h:i:A'),
-                    'updated' => $this->updated_at->format('Y-m-d : h:i:A'),
-                    'deleted' => $this->deleted_at ? $this->deleted_at->format('Y-m-d : h:i:A') : null
-                ],
+                // 'payment' => $this->whenLoaded('payment', function () {
+                //     return new PaymentResource($this->payment);
+                // }),
+                // 'fare' => $this->fare,
             ],
-            'transaction_status' => $this->status
+            'transaction_status' => $this->status,
+            'timestamp' => [
+                'created' => $this->created_at->format('Y-m-d : h:i:A'),
+                'updated' => $this->updated_at->format('Y-m-d : h:i:A'),
+                'deleted' => $this->deleted_at ? $this->deleted_at->format('Y-m-d : h:i:A') : null
+            ],
 
         ];
     }

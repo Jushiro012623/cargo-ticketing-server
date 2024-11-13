@@ -17,9 +17,10 @@ return new class extends Migration
             $table->unsignedBigInteger('type_id')->constrained()->cascadeOnDelete(); // Foreign key
             $table->unsignedBigInteger('vessel_id')->constrained()->cascadeOnDelete(); // Foreign key
             $table->unsignedBigInteger("fare_id")->constrained()->cascadeOnDelete(); // Foreign key
+            $table->unsignedBigInteger("discount_id")->constrained()->cascadeOnDelete(); // Foreign key
 
             // Ticket attributes
-            $table->bigInteger('ticket_number')->unique(); // Ensure uniqueness
+            $table->string('ticket_number')->unique(); // Ensure uniqueness
             $table->bigInteger('voyage_number'); // Consider unique if necessary
 
             $table->string('status', 105)->default(2)->comment('0 -> Complete, 1 -> Pending, 2 -> InTransit, 3 -> Canceled');

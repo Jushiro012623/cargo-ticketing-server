@@ -36,13 +36,12 @@ class PaymentService
         }
 
         $additional_fee = $request->additional ? $ticket->fare->additional_fee : 0;
-
         // Ensure all values are numeric
         $total_amount = (float)$discount + (float)$additional_fee;
 
         $payment_info = Payment::create([
             'ticket_id' => $ticket->id,
-            'amount' => $ticket->fare->regular,
+            'amount' => $ticket->fare->fare,
             'transaction_code' => "VSL" . mt_rand(100000, 9999999999),
             'additional_fee' => $additional_fee,
             'total_amount' => $total_amount,

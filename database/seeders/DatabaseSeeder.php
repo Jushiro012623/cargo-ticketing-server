@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             FareSeeder::class,
             RouteSeeder::class,
             VesselSeeder::class,
+            DiscountSeeder::class,
         ]);
         
         Role::factory()->create([

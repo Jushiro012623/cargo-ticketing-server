@@ -23,7 +23,6 @@ class TicketController extends Controller
     use ApiResponse;
     private $ticketService;
     private $paymentService;
-
     public function __construct()
     {
         $this->ticketService = new TicketService();
@@ -48,23 +47,23 @@ class TicketController extends Controller
             // Gate::authorize('create', Ticket::class); )
             DB::beginTransaction();
             $ticket_fare = $this->ticketService->getTicketFare($request);
-            // dd($request->user());
             $ticket = Ticket::create(array_merge(
-
                 [
-                    'user_id' =>  $request->user()->id,
-                    // 'user_id' =>  '1',
+                    // 'user_id' =>  $request->user()->id,
+                    'user_id' =>  '1',
                     'fare_id' =>  $ticket_fare->id,
-                    'ticket_number' => mt_rand(10000000, 9999999999),
+                    'ticket_number' => $request->ticket_number ?? mt_rand(10000000, 9999999999),
+                    // 'ticket_number' => ,
                     'status' => 'pending', # 'in_transit', 'completed', 'cancelled'
                     'voyage_number' => mt_rand(1000, 999999),
+                    'discount_id' => $request->discount_id ?? $request->ticket_id != 1 ? 1 : $request->discount_id ,
                 ],
                 $request->validated(),
             ));
             $this->ticketService->createTransactionType($request, $ticket->id);
             $payment_id = $this->paymentService->storePayment($ticket, $request);
             $payment = Payment::findOrFail($payment_id->id);
-            Mail::to('ivanallen64@gmail.com')->send(new Booked($request->user(), $payment));
+            // Mail::to('ivanallen64@gmail.com')->send(new Booked($request->user(), $payment));
             DB::commit();
             $ticket_resource = new TransactionResource($ticket->load(['payment']));
 

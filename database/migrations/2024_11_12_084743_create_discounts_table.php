@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('passengers', function (Blueprint $table) {
+        Schema::create('discounts', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger("ticket_id")->constrained()->cascadeOnDelete();
-            // $table->string("discount");
-            $table->boolean("additional");
+            $table->string('name');
+            $table->string('description');
+            $table->string('percentage');
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('passengers');
+        Schema::dropIfExists('discounts');
     }
 };

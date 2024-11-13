@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Api\DiscountResource;
+use App\Http\Resources\Api\TransactionFareResource;
+use App\Models\Discount;
 use App\Models\Fare;
 use Illuminate\Http\Request;
 
@@ -37,9 +40,22 @@ class FareController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    public function showTransactionFare(Request $request){
+        $fare = Fare::where('route_id', $request->route_id)
+                ->where('length', $request->type_id == 2 ? $request->weight  :  null)
+                ->where('type_id', $request->type_id)->first();
+        $discount = Discount::findOrFail($request->type_id == 1 ?  $request->discount_id : 1);
+        // dd($fare->route);
+        // $spreadFare = ;
+        return response()->json([
+            'data' => ['fare' => new TransactionFareResource($fare),'discount' => ['name' => $discount->name, 'ammount_off' => $discount->description, 'deduction' => $discount->percentage]],      
+           'message' => 'Fare retrieved successfully'
+        ]);
+    }
     public function store(Request $request)
     {
-        //
+
+        
     }
 
     /**
@@ -47,7 +63,6 @@ class FareController extends Controller
      */
     public function show(string $id)
     {
-        //
     }
 
     /**

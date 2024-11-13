@@ -56,11 +56,12 @@ class TicketRequest extends FormRequest
             'type_id' => 'required|integer|in:1,2,3',
             'vessel_id' => 'required|exists:vessels,id',
             'route_id' => 'required|exists:routes,id',
+            // 'ticket_number' => 'required'
             // 'payment_method_id' => 'required|exists:payment_methods,id'
         ];
         switch ($type_id) {
             case 1: // Passenger
-                $rules['discount'] = 'required|string';
+                $rules['discount_id'] = 'required|string';
                 $rules['additional'] = 'required|in:1,2';
                 break;
             case 2: // Rolling Cargo
