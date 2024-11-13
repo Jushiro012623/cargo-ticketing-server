@@ -43,34 +43,29 @@ class TicketController extends Controller
     public function store(TicketRequest $request)
     {
         try {
-            // dd($request->);
             // Gate::authorize('create', Ticket::class); )
             DB::beginTransaction();
-            $ticket_fare = $this->ticketService->getTicketFare($request);
-            $ticket = Ticket::create(array_merge(
-                [
-                    // 'user_id' =>  $request->user()->id,
-                    'user_id' =>  '1',
-                    'fare_id' =>  $ticket_fare->id,
-                    'ticket_number' => $request->ticket_number ?? mt_rand(10000000, 9999999999),
-                    // 'ticket_number' => ,
-                    'status' => 'pending', # 'in_transit', 'completed', 'cancelled'
-                    'voyage_number' => mt_rand(1000, 999999),
-                    'discount_id' => $request->discount_id ?? $request->ticket_id != 1 ? 1 : $request->discount_id ,
-                ],
-                $request->validated(),
-            ));
-            $this->ticketService->createTransactionType($request, $ticket->id);
-            $payment_id = $this->paymentService->storePayment($ticket, $request);
-            $payment = Payment::findOrFail($payment_id->id);
-            // Mail::to('ivanallen64@gmail.com')->send(new Booked($request->user(), $payment));
+                $ticket_fare = $this->ticketService->getTicketFare($request);
+                $ticket = Ticket::create(array_merge(
+                    [
+                        'user_id' =>  $request->user()->id,
+                        'fare_id' =>  $ticket_fare->id,
+                        'ticket_number' => $request->ticket_number ?? mt_rand(10000000, 9999999999),
+                        'voyage_number' => mt_rand(1000, 999999),
+                        'discount_id' => $request->ticket_id != 1 ? 1 : $request->discount_id ,
+                    ],
+                    $request->validated(),
+                ));
+                $this->ticketService->createTransactionType($request, $ticket->id);
+                // $payment_id = $this->paymentService->storePayment($ticket, $request);
+                // $payment = Payment::findOrFail($payment_id->id);
             DB::commit();
-            $ticket_resource = new TransactionResource($ticket->load(['payment']));
-
-            return $this->success('Ticket created successfully', $ticket_resource, 201);
+                // Mail::to('ivanallen64@gmail.com')->send(new Booked($request->user(), $payment));
+                $ticket_resource = new TransactionResource($ticket->load(['payment']));
+                return $this->success('Ticket created successfully', $ticket_resource, 201);
         } catch (\Exception $e) {
             DB::rollBack();
-            return $this->error($e->getMessage(), 500);
+                return $this->error($e->getMessage(), 500);
         }
     }
     public function show(Ticket $ticket)
@@ -118,9 +113,5 @@ class TicketController extends Controller
             return $this->ok('Trashed Ticket restored successfully', new TransactionResource($deleted_ticket));
         }
         return $this->error('Ticket not found', 404);
-    }
-
-    public function review(TicketRequest $request){
-
     }
 }

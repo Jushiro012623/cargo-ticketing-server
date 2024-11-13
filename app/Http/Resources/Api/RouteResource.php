@@ -18,10 +18,8 @@ class RouteResource extends JsonResource
             'type' => 'route',
             'id' => $this->id,
             'transportationType' => $this->transportation_type,
-            'routes' => [
-                'origin' => $this->origin,
-                'destination' => $this->destination
-            ]
+            'origin' => $this->origin,
+            'destination' => $this->destination
         ];
     }
 }

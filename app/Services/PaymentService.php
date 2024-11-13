@@ -10,7 +10,6 @@ class PaymentService
     public function storePayment($ticket, $request)
     {
         $discount = $ticket->fare->regular; // Default value
-
         if ($request->type_id === 1) {
             switch ($ticket->passenger->discount) {
                 case 'regular':
@@ -34,7 +33,6 @@ class PaymentService
                     break;
             }
         }
-
         $additional_fee = $request->additional ? $ticket->fare->additional_fee : 0;
         // Ensure all values are numeric
         $total_amount = (float)$discount + (float)$additional_fee;

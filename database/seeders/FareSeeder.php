@@ -24,11 +24,11 @@ class FareSeeder extends Seeder
             ['additional_fee' => 50, 'fare' => 700,  'type_id' => 1, 'route_id' => 4,],
 
             
-            ['additional_fee' => 70, 'fare' => 750, 'type_id' => 3, 'route_id' => 2,],
-            ['additional_fee' => 100, 'fare' => 1060,  'type_id' => 3, 'route_id' => 3,],
-            ['additional_fee' => 50, 'fare' => 375,  'type_id' => 3, 'route_id' => 5,],
-            ['additional_fee' => 70, 'fare' => 900,  'type_id' => 3, 'route_id' => 6,],
-            ['additional_fee' => 50, 'fare' => 700,  'type_id' => 3, 'route_id' => 4,],
+            ['additional_fee' => 0, 'fare' => 750, 'type_id' => 3, 'route_id' => 2,],
+            ['additional_fee' => 0, 'fare' => 1060,  'type_id' => 3, 'route_id' => 3,],
+            ['additional_fee' => 0, 'fare' => 375,  'type_id' => 3, 'route_id' => 5,],
+            ['additional_fee' => 0, 'fare' => 900,  'type_id' => 3, 'route_id' => 6,],
+            ['additional_fee' => 0, 'fare' => 700,  'type_id' => 3, 'route_id' => 4,],
             //bike
             ['additional_fee' => 0,'length' => 0.5, 'fare' => 420, 'route_id' => 1,'type_id' => 2],
             ['additional_fee' => 0,'length' => 0.5, 'fare' => 600, 'route_id' => 2,'type_id' => 2],

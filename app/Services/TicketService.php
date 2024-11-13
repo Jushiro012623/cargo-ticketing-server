@@ -56,11 +56,6 @@ class TicketService
     public function updateTicket(Request $request,Ticket $ticket)
     {
         try {
-
-            // if (auth()->user()->id !== $ticket->user_id) {
-            //     return $this->error('Unauthorize action',401);
-            // }
-            // dd($ticket);
             Gate::authorize('update', $ticket);
             DB::beginTransaction();
                 $ticket->update($request->validated());
