@@ -14,13 +14,13 @@ class RoutesController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Route::query();
+        $QUERY = Route::query();
         if ($request->has('transportation_type')) {
-            $query->where('transportation_type', $request->transportation_type)->get();
+            $QUERY->where('transportation_type', $request->transportation_type)->get();
         }
-        $routes = $query->limit(4)->get();
-        $response = RouteResource::collection($routes);
-        return $response;
+        $ROUTES = $QUERY->limit(4)->get();
+        $ROUTES_COLLECTION = RouteResource::collection($ROUTES);
+        return $ROUTES_COLLECTION;
     }
 
     /**

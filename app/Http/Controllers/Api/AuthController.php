@@ -13,23 +13,29 @@ use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
     use ApiResponse;
+    protected function respondWithToken($token)
+    {
+        $user = Auth::user();
+        $data = [
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => Auth::factory()->getTTL() * 60,
+            'role_id' => $user->user_role_id
+        ];
+        return $this->ok('Logged In Successfully', $data);
+    }
     public function login(AuthRequests $request)
     {
-        $login_user = Auth::attempt($request->only('email', 'password'));
-        if (!$login_user) {
-            return $this->error('Invalid Credentials', 401 );
+        if(!$token = Auth::attempt($request->only('email', 'password')))
+        {
+            return $this->error('Invalid Credentials', self::UNAUTHORIZED );
         }
-        $user = User::firstWhere('email', $request->email);
-        $userToken = [
-            'token' =>$user->createToken('Token for '. $user->email, Abilities::getAbilities($user), now() -> addMonth() )->plainTextToken
-        ];
-        return $this->ok('Loggin Successfully', $userToken);
+        return $this->respondWithToken($token);
     }
-
     public function register(AuthRequests $request)
     {
         $registerUser = User::create($request->validated());
-        return $this->success('Register Successfully', $registerUser, 201);
+        return $this->success('Register Successfully', $registerUser, self::CREATED);
     }
 
     public function logout(Request $request){

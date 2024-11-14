@@ -56,7 +56,8 @@ class TicketRequest extends FormRequest
             'type_id' => 'required|integer|in:1,2,3',
             'vessel_id' => 'required|exists:vessels,id',
             'route_id' => 'required|exists:routes,id',
-            // 'ticket_number' => 'required'
+            'fare_id' => 'required|exists:fares,id',
+            'ticket_number' => 'required'
             // 'payment_method_id' => 'required|exists:payment_methods,id'
         ];
         switch ($type_id) {

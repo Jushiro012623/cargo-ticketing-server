@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\JWTAuth;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -12,7 +13,6 @@ use Symfony\Component\Console\Exception\CommandNotFoundException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
@@ -27,6 +27,10 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         //
+        $middleware->alias([
+            'jwt-auth' => JWTAuth::class
+        ]);
+        // $middleware->append(FacadesJWTAuth::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->renderable(function (Exception $e, Request $request) {

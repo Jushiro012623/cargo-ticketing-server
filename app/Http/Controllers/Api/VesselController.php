@@ -14,9 +14,9 @@ class VesselController extends Controller
      */
     public function index()
     {
-        $vessels = Vessel::all();
-        $response = VesselResource::collection($vessels);
-        return $response;
+        $VESSELS = Vessel::all();
+        $VESSEL_COLLECTION = VesselResource::collection($VESSELS);
+        return $VESSEL_COLLECTION;
     }
 
     /**

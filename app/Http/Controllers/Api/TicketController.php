@@ -43,34 +43,32 @@ class TicketController extends Controller
     public function store(TicketRequest $request)
     {
         try {
-            // Gate::authorize('create', Ticket::class); )
+            // ? Gate::authorize('create', Ticket::class); ) 
             DB::beginTransaction();
-                $ticket_fare = $this->ticketService->getTicketFare($request);
+                // ! $ticket_fare = $this->ticketService->getTicketFare($request); 
                 $ticket = Ticket::create(array_merge(
                     [
                         'user_id' =>  $request->user()->id,
-                        'fare_id' =>  $ticket_fare->id,
-                        'ticket_number' => $request->ticket_number ?? mt_rand(10000000, 9999999999),
                         'voyage_number' => mt_rand(1000, 999999),
                         'discount_id' => $request->ticket_id != 1 ? 1 : $request->discount_id ,
                     ],
                     $request->validated(),
                 ));
                 $this->ticketService->createTransactionType($request, $ticket->id);
-                // $payment_id = $this->paymentService->storePayment($ticket, $request);
-                // $payment = Payment::findOrFail($payment_id->id);
+                // * $payment_id = $this->paymentService->storePayment($ticket, $request);
+                // * $payment = Payment::findOrFail($payment_id->id);
             DB::commit();
-                // Mail::to('ivanallen64@gmail.com')->send(new Booked($request->user(), $payment));
-                $ticket_resource = new TransactionResource($ticket->load(['payment']));
-                return $this->success('Ticket created successfully', $ticket_resource, 201);
+                // * Mail::to('ivanallen64@gmail.com')->send(new Booked($request->user(), $payment));
+                $TICKET_RESOURCE = new TransactionResource($ticket->load(['payment']));
+                return $this->success('Ticket created successfully', $TICKET_RESOURCE, self::CREATED);
         } catch (\Exception $e) {
             DB::rollBack();
-                return $this->error($e->getMessage(), 500);
+                return $this->error($e->getMessage(), self::SERVER_ERROR);
         }
     }
     public function show(Ticket $ticket)
     {
-        // Gate::authorize('view', $ticket);
+        // ? Gate::authorize('view', $ticket);
         $ticket_resource = new TransactionResource($ticket->load(['payment','user']));
         return $this->ok('Ticket retrieved successfully', $ticket_resource);
     }
