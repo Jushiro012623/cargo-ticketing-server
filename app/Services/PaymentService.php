@@ -55,7 +55,7 @@ class PaymentService
         $data = new stdClass();
         $data->id = $request->type_id == 1 ?  $request->discount_id : 1;
         $data->discount = Discount::findOrFail($data->id);
-        $data->resource = new DiscountResource($data->discounts);
+        $data->resource = new DiscountResource($data->discount);
         return [
             'fare' => $fare,
             'discount' => $data->resource
