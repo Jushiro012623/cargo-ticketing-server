@@ -54,13 +54,13 @@ class TransactionResource extends JsonResource
             case 2:
                 $ticketDetails = [ 
                     'vehicle_type' => $this->rollingCargo->vehicle_type,
-                    'weight' => $this->rollingCargo->weight,
+                    'weight' => $this->rollingCargo->weight->name,
                     'plate_number' => $this->rollingCargo->plate_number
                 ];
                 break;
             case 3:
                 $ticketDetails = [
-                    'weight' => $this->dropCargo->weight,
+                    'weight' => $this->dropCargo->weight->name,
                     'item_name' => $this->dropCargo->item_name,
                     'cargo_description' => $this->dropCargo->cargo_description,
                     'quantity' => $this->dropCargo->quantity

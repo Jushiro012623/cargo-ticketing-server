@@ -9,6 +9,7 @@ use App\Permissions\Abilities;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use stdClass;
 
 class AuthController extends Controller
 {

@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\FareController;
+use App\Http\Controllers\Api\FareDiscountController;
 use App\Http\Controllers\Api\TicketController;
 use App\Http\Controllers\Api\VesselController;
 use App\Http\Controllers\Api\RoutesController;
+use App\Http\Controllers\Api\WeightController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -13,15 +15,16 @@ Route::get('/user', function (Request $request) {
 })->middleware('jwt-auth');
 
 Route::group(['controller' => AuthController::class], function (){
-    Route::post('/login', 'login')->name('login')->middleware('guest:sanctum');
-    Route::post('/register', 'register')->name('register')->middleware('guest:sanctum');
+    Route::post('/login', 'login')->name('login')->middleware('guest-auth');
+    Route::post('/register', 'register')->name('register')->middleware('guest-auth');
     Route::post('/logout', 'logout')->name('logout')->middleware('jwt-auth');
 });
 Route::middleware(['jwt-auth'])->group(function () {
     Route::apiResource('/route',RoutesController::class);
     Route::apiResource('/vessel',VesselController::class);
     Route::apiResource('/fare',FareController::class);
-    Route::post('/fare/transactionFare',[FareController::class, 'showTransactionFare']);
+    Route::apiResource('/weight',WeightController::class);
+    Route::post('/fare/transactionFare',FareDiscountController::class);
     Route::prefix('ticket/trashed')->group(function () {
         Route::get('', [TicketController::class, 'trashed'])->name('ticket.trashed');
         Route::post('/restore/{ticket}', [TicketController::class, 'restore'])->name('ticket.trashed.restore');

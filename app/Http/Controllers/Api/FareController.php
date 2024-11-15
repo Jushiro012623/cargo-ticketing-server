@@ -3,10 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Api\DiscountResource;
-use App\Http\Resources\Api\TransactionFareResource;
-use App\Models\Discount;
-use App\Models\Fare;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 
@@ -16,8 +12,7 @@ class FareController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
-    {
+    public function index(Request $request){
         // $query = Fare::with('route');
         // if ($request->has('transportation_type')) {
         //     $query->whereHas('route', function($query) use ($request) {
@@ -29,22 +24,6 @@ class FareController extends Controller
         // return $query->get();
     }
 
-    public function showTransactionFare(Request $request){
-        // TODO TRNSACTIONFARE REQUEST
-        $FARE = Fare::where('route_id', $request->route_id)
-                ->where('length', $request->type_id == 2 ? $request->weight  :  null)
-                ->where('type_id', $request->type_id)->first();
-        $DISCOUNT = Discount::findOrFail($request->type_id == 1 ?  $request->discount_id : 1);
-        $DATA = [
-            'fare' => new TransactionFareResource($FARE),
-            'discount' => [
-                'name' => $DISCOUNT->name, 
-                'ammount_off' => $DISCOUNT->description, 
-                'deduction' => $DISCOUNT->percentage
-            ]
-        ];
-        return $this->ok('Fare retrieved successfully', $DATA);
-    }
     public function store(Request $request)
     {
 
@@ -73,4 +52,5 @@ class FareController extends Controller
     {
         //
     }
+    
 }

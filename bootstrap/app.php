@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\GuestMiddleware;
 use App\Http\Middleware\JWTAuth;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Application;
@@ -28,7 +29,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         //
         $middleware->alias([
-            'jwt-auth' => JWTAuth::class
+            'jwt-auth' => JWTAuth::class,
+            'guest-auth' => GuestMiddleware::class
         ]);
         // $middleware->append(FacadesJWTAuth::class);
     })

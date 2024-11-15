@@ -16,12 +16,12 @@ return new class extends Migration
             $table->unsignedBigInteger("route_id")->constrained()->cascadeOnDelete();
             $table->unsignedBigInteger("type_id")->nullable();
             $table->string("fare");
+            $table->unsignedBigInteger("weight_id")->nullable();
             // $table->unsignedBigInteger("discount_id")->constrained()->cascadeOnDelete(); // Foreign key
             // $table->string("student")->nullable();
             // $table->string("pwd_senior")->nullable();
             // $table->string("half_fare")->nullable();
             // $table->string("minor")->nullable();
-            $table->string("length")->nullable();
             $table->string("additional_fee")->nullable();
             $table->timestamps();
         });

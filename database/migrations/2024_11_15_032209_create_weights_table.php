@@ -11,13 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('drop_cargos', function (Blueprint $table) {
+        Schema::create('weights', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger("ticket_id")->constrained()->cascadeOnDelete();
-            $table->unsignedBigInteger("weight_id")->constrained()->cascadeOnDelete();
-            $table->text("cargo_description");
-            $table->string("item_name");
-            $table->string("quantity");
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -27,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('drop_cargos');
+        Schema::dropIfExists('weights');
     }
 };

@@ -16,17 +16,9 @@ class TransactionFareResource extends JsonResource
     {
         return [
             'id' => $this->id,
-                // 'route' =>  [
-                //     'origin' => $this->route->origin,
-                //     'destination' => $this->route->destination,
-                //     'transportation_type' => $this->route->transportation_type,
-                // ],
-                'weight' => $this->length,
-                'additional_fee' => $this->additional_fee,
-                'fare' => $this->fare
+            'weight' => $this->weight_id,
+            'additional_fee' => $this->additional_fee,
+            'fare' => $this->fare
         ];
-    }
-    public function discount(){
-
     }
 }

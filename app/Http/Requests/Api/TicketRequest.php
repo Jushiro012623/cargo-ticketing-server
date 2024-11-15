@@ -68,13 +68,13 @@ class TicketRequest extends FormRequest
             case 2: // Rolling Cargo
                 $rules['vehicle_type'] = 'required|string';
                 $rules['plate_number'] = 'required|string';
-                $rules['weight'] = 'required|integer';
+                $rules['weight_id'] = 'required|integer|exists:weights,id';
                 break;
             case 3: // Drop Cargo
                 $rules['cargo_description'] = 'required|min:8';
                 $rules['item_name'] = 'required|string';
                 $rules['quantity'] = 'required|integer';
-                $rules['weight'] = 'required|integer';
+                $rules['weight_id'] = 'required|integer|exists:weights,id';
                 break;
             default:
             throw new \InvalidArgumentException('Invalid method', 405);

@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             RouteSeeder::class,
             VesselSeeder::class,
             DiscountSeeder::class,
+            WeightSeeder::class,
         ]);
         
         Role::factory()->create([

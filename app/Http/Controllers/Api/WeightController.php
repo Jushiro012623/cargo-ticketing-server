@@ -3,24 +3,25 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Api\RouteResource;
-use App\Models\Route;
+use App\Models\Weight;
+use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
+use stdClass;
 
-class RoutesController extends Controller
+class WeightController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(Request $request)
+    use ApiResponse;
+    public function index()
     {
-        $query = Route::query();
-        if ($request->has('transportation_type')) {
-            $query->where('transportation_type', $request->transportation_type)->get();
-            $routes = $query->limit(4)->get();
-            $routes_collection = RouteResource::collection($routes);
-            return $routes_collection;
-        }
+        $weights = new stdClass(); 
+        $weights->weight = Weight::all();
+        $weights->collection = $weights->weight->map(function ($weight) {
+            return [
+                'id' => $weight->id,
+                'name' => $weight->name,
+            ];
+        });
+        return $this->ok('Weights Retrieved Successfully', $weights->collection);
     }
 
     /**

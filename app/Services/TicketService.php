@@ -12,6 +12,7 @@ use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
+use stdClass;
 
 class TicketService
 {
@@ -50,7 +51,7 @@ class TicketService
         }
         return Fare::where('type_id', $request->type_id )
                 ->where('route_id', $request->route_id)
-                ->where('length', $request->weight)
+                ->where('weight_id', $request->weight)
                 ->first();
     }
     public function updateTicket(Request $request,Ticket $ticket)

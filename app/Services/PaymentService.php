@@ -2,8 +2,11 @@
 
 namespace App\Services;
 
+use App\Http\Resources\Api\DiscountResource;
+use App\Models\Discount;
 use App\Models\Payment;
 use Carbon\Carbon;
+use stdClass;
 
 class PaymentService
 {
@@ -47,5 +50,15 @@ class PaymentService
         ]);
 
         return $payment_info;
+    }
+    public function getDiscount($request, $fare){
+        $data = new stdClass();
+        $data->id = $request->type_id == 1 ?  $request->discount_id : 1;
+        $data->discount = Discount::findOrFail($data->id);
+        $data->resource = new DiscountResource($data->discounts);
+        return [
+            'fare' => $fare,
+            'discount' => $data->resource
+        ];
     }
 }
