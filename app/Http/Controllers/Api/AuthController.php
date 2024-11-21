@@ -24,6 +24,7 @@ class AuthController extends Controller
             'role_id' => $user->user_role_id
         ];
         return $this->ok('Logged In Successfully', $data);
+        // 
     }
     public function login(AuthRequests $request)
     {
