@@ -4,24 +4,23 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\AuthRequests;
+use App\Http\Resources\Api\UserResource;
 use App\Models\User;
 use App\Permissions\Abilities;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use stdClass;
-
 class AuthController extends Controller
 {
     use ApiResponse;
     protected function respondWithToken($token)
     {
-        $user = Auth::user();
+        $user = new UserResource(Auth::user());
         $data = [
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => Auth::factory()->getTTL() * 60,
-            'role_id' => $user->user_role_id
+            'user' => $user,
         ];
         return $this->ok('Logged In Successfully', $data);
         // 
@@ -43,4 +42,9 @@ class AuthController extends Controller
     public function logout(Request $request){
         $request->user()->currentAccessToken()->delete();
     }
+
+    // public function refreshToken(){
+
+    //     return $this->respondWithToken();
+    // }
 }

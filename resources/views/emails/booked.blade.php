@@ -367,7 +367,7 @@
 						<span class="preheader">Preheader</span>
 						<!-- END PREHEADER -->
 						<div class="logo">
-							<a href="*|BASE_URL|*" target="_blank"><img src="https://s3.amazonaws.com/habitica-assets/emails/images/habitica-logo.png" alt="Habitica"/></a>
+							<a href="*|BASE_URL|*" target="_blank"><img src="../../assets/logo.svg" alt="Habitica"/></a>
 						</div>
 						<table class="main">
 							<!-- START MAIN CONTENT -->
@@ -402,7 +402,7 @@
 													</tbody>
 												</table>
 												<!-- END BUTTON TEMPLATE -->
-												<p>Warmly,<br /><strong>The Habitica Team</strong></p>
+												<p>Warmly,<br /><strong>The Game of Thornes</strong></p>
 											</td>
 										</tr>
 									</table>
@@ -414,7 +414,7 @@
 								<tr>
 									<td>
 										<a href="https://itunes.apple.com/us/app/habitica-gamified-taskmanager/id994882113" target="_blank"><img src="https://s3.amazonaws.com/habitica-assets/emails/images/app-store.png" alt="Download on the App Store"></a><a href="https://play.google.com/store/apps/details?id=com.habitrpg.android.habitica" target="_blank"><img src="https://s3.amazonaws.com/habitica-assets/emails/images/google-play.png" alt="Download on Google Play"></a>
-										<p>Or visit us on the web <a href="*|BASE_URL|*" target="_blank">habitica.com</a></p>
+										<p>Or visit us on the web <a href="*|BASE_URL|*" target="_blank">gameofthornes.com</a></p>
 									</td>
 								</tr>
 							</table>

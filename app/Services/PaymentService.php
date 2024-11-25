@@ -15,19 +15,19 @@ class PaymentService
         $discount = $ticket->fare->regular; // Default value
         if ($request->type_id === 1) {
             switch ($ticket->passenger->discount) {
-                case 'regular':
+                case 'REGULAR':
                     $discount = $ticket->fare->regular;
                     break;
-                case 'student':
+                case 'STUDENT':
                     $discount = $ticket->fare->student;
                     break;
-                case 'pwd_senior':
+                case 'PWD/SENIOR':
                     $discount = $ticket->fare->pwd_senior;
                     break;
-                case 'minor':
+                case 'MINOR':
                     $discount = $ticket->fare->minor;
                     break;
-                case 'half_fare':
+                case 'HALF FARE':
                     $discount = $ticket->fare->half_fare;
                     break;
                 default:
