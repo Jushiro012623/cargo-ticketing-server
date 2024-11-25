@@ -4,65 +4,113 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\TicketRequest;
+use App\Http\Resources\Api\TransactionResource;
+use App\Mail\Booked;
 use App\Models\Fare;
+use App\Models\Payment;
+use App\Models\Route;
 use App\Models\Ticket;
+use App\Services\PaymentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Services\TicketService;
+use App\Traits\ApiResponse;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Mail;
+use stdClass;
 
 class TicketController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    private $ticket_fare;
-    
+    use ApiResponse;
+    private $ticketService;
+    private $paymentService;
     public function __construct()
     {
-        $this->ticket_fare = new TicketService();
+        $this->ticketService = new TicketService();
+        $this->paymentService = new PaymentService();
     }
-    public function index()
+    public function index(TicketRequest $request)
     {
-        return Ticket::paginate(10);
+        // Gate::authorize('viewAny', Ticket::class);
+        // $tickets = Ticket::with(['payment', 'fare.route', 'fare', 'user'])->paginate(10);
+        // $tickets_resource = TransactionResource::collection($tickets);
+        // return response()->json($tickets_resource->response()->getData());
+        $tickets = Ticket::where('user_id', $request->user()->id)->with(['payment', 'fare.route', 'fare'])->paginate(10);
+        // dd($request->user()->id);
+        // dd($tickets);
+        $tickets_resource = TransactionResource::collection($tickets);
+        return response()->json($tickets_resource->response()->getData());
     }
     public function store(TicketRequest $request)
     {
-        $user_ticket = DB::transaction(function () use ($request) {
-            $initial_ticket = Ticket::create(array_merge(
-                [
-                    'user_id' =>  $request->user()->id,
-                    'ticket_number' => mt_rand(1000000000, 9999999999),
-                    'status' => 'pending' # 'in_transit', 'completed', 'cancelled'
-                ],
-                $request->validated(),
-            ));  
-            return $this->ticket_fare->getTicketFare($request, $initial_ticket->id);
-             $initial_ticket;
-        });
-        return $user_ticket;
+        $ticket = new stdClass();
+        try {
+            // ? Gate::authorize('create', Ticket::class); ) 
+            DB::beginTransaction();
+                $ticket->initital = Ticket::create(array_merge(
+                    [
+                        'user_id' =>  $request->user()->id,
+                        'voyage_number' => mt_rand(1000, 999999),
+                        'discount_id' => $request->ticket_id != 1 ? 1 : $request->discount_id
+                    ],
+                    $request->validated(),
+                ));
+                $this->ticketService->createTransactionType($request, $ticket->initital->id);
+                // * $payment_id = $this->paymentService->storePayment($ticket, $request);
+                // * $payment = Payment::findOrFail($payment_id->id);
+            DB::commit();
+                // * Mail::to('ivanallen64@gmail.com')->send(new Booked($request->user(), $payment));
+                $ticket->resource = new TransactionResource($ticket->initital->load(['payment']));
+                return $this->success('Ticket created successfully', $ticket->resource, self::CREATED);
+        } catch (\Exception $e) {
+            DB::rollBack();
+                return $this->error($e->getMessage(), self::SERVER_ERROR);
+        }
+    }
+    public function show(Ticket $ticket)
+    {
+        // ? Gate::authorize('view', $ticket);
+        $ticket_resource = new TransactionResource($ticket->load(['payment','user']));
+        return $this->ok('Ticket retrieved successfully', $ticket_resource);
+    }
+    public function update(TicketRequest $request, Ticket $ticket)
+    {
+        Gate::authorize('update', $ticket);
+        return $this->ticketService->updateTicket($request,$ticket);
+    }
+    public function replace(TicketRequest $request, Ticket $ticket)
+    {
+        Gate::authorize('replace', $ticket);
+        return $this->ticketService->updateTicket($request,$ticket);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function destroy(Request $request, Ticket $ticket)
     {
-        //
+        Gate::authorize('delete', $ticket);
+        $ticket->delete();
+        return response()->json([
+            'message' => 'Ticket deleted successfully',
+        ], 204);
+    }
+    public function trashed()
+    {
+        Gate::authorize('viewTrashed', Ticket::class);
+        $trashed_tickets = Ticket::onlyTrashed()->paginate(15);
+        if ($trashed_tickets->isEmpty()) {
+            return response()->json(['message' => 'No trashed tickets found.'], 404);
+        }
+        $trashed_ticket_collection = TransactionResource::collection($trashed_tickets);
+        return $this->ok('Trashed Tickets retrieved successfully', $trashed_ticket_collection->response()->getData());
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function restore(string $ticket)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        Gate::authorize('restore', Ticket::class);
+        $deleted_ticket = Ticket::withTrashed()->find($ticket);
+        if ($deleted_ticket) {
+            $deleted_ticket->restore();
+            return $this->ok('Trashed Ticket restored successfully', new TransactionResource($deleted_ticket));
+        }
+        return $this->error('Ticket not found', 404);
     }
 }

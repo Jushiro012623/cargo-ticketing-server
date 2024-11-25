@@ -8,13 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Fare extends Model
 {
     use HasFactory;
-    // public function passenger(){
-    //     return $this->belongsTo(Passenger::class);
-    // }
-    // public function rollingCargo(){
-    //     return $this->belongsTo(RollingCargo::class);
-    // }
-    // public function dropCargo(){
-    //     return $this->belongsTo(DropCargo::class);
-    // }
+
+    protected $fillable = ['fare', 'type_id', 'route_id', 'discount', 'additional_fee'];
+    public function route()
+    {
+        return $this->belongsTo(Route::class);
+    }
+
+    public function tickets()
+    {
+        return $this->hasOne(Ticket::class);
+    }
 }

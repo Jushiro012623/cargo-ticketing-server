@@ -17,11 +17,10 @@ class RoutesController extends Controller
         $query = Route::query();
         if ($request->has('transportation_type')) {
             $query->where('transportation_type', $request->transportation_type)->get();
+            $routes = $query->limit(4)->get();
+            $routes_collection = RouteResource::collection($routes);
+            return $routes_collection;
         }
-        $routes = $query->limit(4)->get();
-        $response = RouteResource::collection($routes);
-        return $response;
-
     }
 
     /**

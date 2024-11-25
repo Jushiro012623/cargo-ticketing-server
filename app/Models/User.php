@@ -3,14 +3,17 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
-    use HasFactory, Notifiable, HasApiTokens;
+    use HasFactory, Notifiable, HasApiTokens, CanResetPassword;
 
     /**
      * The attributes that are mass assignable.
@@ -23,6 +26,7 @@ class User extends Authenticatable
         'address',
         'email',
         'password',
+        'user_role_id'
     ];
 
     /**
@@ -34,7 +38,15 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
 
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
     /**
      * Get the attributes that should be cast.
      *
@@ -50,5 +62,8 @@ class User extends Authenticatable
 
     public function ticket(){
         return $this->hasMany(Ticket:: class);
+    }
+    public function role(){
+        return $this->belongsTo(Role:: class);
     }
 }

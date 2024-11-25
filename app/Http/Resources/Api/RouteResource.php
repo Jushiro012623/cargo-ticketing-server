@@ -17,13 +17,9 @@ class RouteResource extends JsonResource
         return [
             'type' => 'route',
             'id' => $this->id,
-            'attributes' => [
-                'transportationType' => $this->transportation_type,
-                'routes' => [
-                    'origin' => $this->origin,
-                    'destination' => $this->destination
-                ]
-            ]
+            'transportationType' => $this->transportation_type,
+            'origin' => $this->origin,
+            'destination' => $this->destination
         ];
     }
 }

@@ -10,4 +10,8 @@ class Vessel extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'description'];
+
+    public function tickets(){
+        return $this->hasOne(Ticket::class);
+    }
 }

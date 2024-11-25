@@ -8,11 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class DropCargo extends Model
 {
     use HasFactory;
-    protected $fillable = ['weight', 'ticket_id', 'fare_id' , 'cargo_description'];
+    protected $fillable = ['weight_id', 'ticket_id', 'item_name', 'quantity','cargo_description'];
     public function ticket(){
         return $this->belongsTo(Ticket::class);
     }
-    public function fare(){
-        return $this->hasOne(Fare::class);
+    public function weight()
+    {
+        return $this->belongsTo(Weight::class);
     }
 }
