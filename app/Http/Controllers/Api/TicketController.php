@@ -56,7 +56,7 @@ class TicketController extends Controller
                     $request->validated(),
                 ));
                 $this->ticketService->createTransactionType($request, $ticket->initital->id);
-                dd($request->all());
+                // dd($request->all());
                 // $payment_id = $this->paymentService->storePayment($ticket, $request);
                 // * $payment = Payment::findOrFail($payment_id->id);
             DB::commit();

@@ -61,7 +61,6 @@ class PaymentService
         $response->discounted_amount = $response->total_amount * $response->initData->percentage;
         $response->grand_total = ($response->total_amount - $response->discounted_amount);
         $response->fare = $fare;
-        // dd($response);
         $resource = new DiscountResource($response);
 
         return $resource;
