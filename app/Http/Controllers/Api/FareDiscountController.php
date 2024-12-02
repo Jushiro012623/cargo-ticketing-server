@@ -23,15 +23,17 @@ class FareDiscountController extends Controller
     }
     public function __invoke(FetchFareRequest $request)
     {
-        $data = new stdClass();
-        $data->fare = Fare::where('route_id', $request->route_id)
+        $fare = Fare::where('route_id', $request->route_id)
         ->where('type_id', $request->type_id)
         ->where(function($query) use ($request) {
             $request->type_id == 2 ? $query->where('weight_id', $request->weight_id) : $query->whereNull('weight_id');
         })
         ->first();
-        $data->fare_resource = new TransactionFareResource($data->fare);
-        $data->fare_discount = $this->fareDiscount->getDiscount($request, $data->fare_resource);
-        return $this->ok('Fare retrieved successfully', $data->fare_discount);
+        // dd($fare);
+        // $fare_resource = new TransactionFareResource($fare);
+        
+        $fare_discount = $this->fareDiscount->getDiscount($request, $fare);
+
+        return $this->ok('Fare retrieved successfully', $fare_discount);
     }
 }

@@ -18,7 +18,8 @@ class TransactionFareResource extends JsonResource
             'id' => $this->id,
             'weight' => $this->weight_id,
             'additional_fee' => $this->additional_fee,
-            'fare' => $this->fare
+            'fare' => $this->fare,
+            'additional' => $request?->additional == 2 ? true : false,
         ];
     }
 }
