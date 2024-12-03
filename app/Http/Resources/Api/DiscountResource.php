@@ -15,11 +15,11 @@ class DiscountResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->initData->id,
+            'id' => $this->discount->id,
             'discount' => [
-                'description' => $this->initData->description,
-                'name' => $this->initData->name,
-                'percentage' => $this->initData->percentage,
+                'description' => $this->discount->description,
+                'name' => $this->discount->name,
+                'percentage' => $this->discount->percentage,
             ],
             'calculated_amount' => [
                 'discounted_amount' => $this->discounted_amount,

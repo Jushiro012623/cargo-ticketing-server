@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('type_id')->constrained()->cascadeOnDelete(); // Foreign key
             $table->unsignedBigInteger('vessel_id')->constrained()->cascadeOnDelete(); // Foreign key
             $table->unsignedBigInteger("fare_id")->constrained()->cascadeOnDelete(); // Foreign key
-            $table->unsignedBigInteger("discount_id")->constrained()->cascadeOnDelete(); // Foreign key
+            $table->unsignedBigInteger("discount_id")->default(1)->constrained()->cascadeOnDelete(); // Foreign key
 
             // Ticket attributes
             $table->string('ticket_number')->unique(); // Ensure uniqueness

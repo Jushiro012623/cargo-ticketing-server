@@ -43,26 +43,24 @@ class TicketController extends Controller
     }
     public function store(TicketRequest $request)
     {
-        $ticket = new stdClass();
         try {
             // ? Gate::authorize('create', Ticket::class); ) 
             DB::beginTransaction();
-                $ticket->initital = Ticket::create(array_merge(
+                $ticket = Ticket::create(array_merge(
                     [
                         'user_id' =>  $request->user()->id,
                         'voyage_number' => mt_rand(1000, 999999),
-                        'discount_id' => $request->ticket_id != 1 ? 1 : $request->discount_id
+                        // 'discount_id' => $request->ticket_id != 1 ? 1 : $request->discount_id
                     ],
                     $request->validated(),
                 ));
-                $this->ticketService->createTransactionType($request, $ticket->initital->id);
-                // dd($request->all());
-                // $payment_id = $this->paymentService->storePayment($ticket, $request);
-                // * $payment = Payment::findOrFail($payment_id->id);
+                $this->ticketService->createTransactionType($request, $ticket->id);
+                $total_fare = $this->paymentService->calculateFares($request);
+                $payment = $this->paymentService->storePayment($ticket, $total_fare);
             DB::commit();
-                // * Mail::to('ivanallen64@gmail.com')->send(new Booked($request->user(), $payment));
-                $ticket->resource = new TransactionResource($ticket->initital->load(['payment']));
-                return $this->success('Ticket created successfully', $ticket->resource, self::CREATED);
+                // Mail::to($request->user()->email)->send(new Booked($request, $payment));
+                $resource = new TransactionResource($ticket->load(['payment']));
+                return $this->success('Ticket created successfully', $resource, self::CREATED);
         } catch (\Exception $e) {
             DB::rollBack();
                 return $this->error($e->getMessage(), self::SERVER_ERROR);

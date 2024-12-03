@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\FetchFareRequest;
+use App\Http\Resources\Api\DiscountResource;
 use App\Http\Resources\Api\TransactionFareResource;
 use App\Models\Fare;
 use App\Services\PaymentService;
@@ -17,23 +18,15 @@ class FareDiscountController extends Controller
     /**
      * Handle the incoming request.
      */
-    private $fareDiscount;
+    
+    private $fare;
     public function __construct(){
-        $this->fareDiscount = new PaymentService();
+        $this->fare = new PaymentService();
     }
     public function __invoke(FetchFareRequest $request)
     {
-        $fare = Fare::where('route_id', $request->route_id)
-        ->where('type_id', $request->type_id)
-        ->where(function($query) use ($request) {
-            $request->type_id == 2 ? $query->where('weight_id', $request->weight_id) : $query->whereNull('weight_id');
-        })
-        ->first();
-        // dd($fare);
-        // $fare_resource = new TransactionFareResource($fare);
-        
-        $fare_discount = $this->fareDiscount->getDiscount($request, $fare);
-
-        return $this->ok('Fare retrieved successfully', $fare_discount);
+        $calulate_fares = $this->fare->calculateFares($request);
+        $total_fares = new DiscountResource($calulate_fares);
+        return $this->ok('Fare retrieved successfully', $total_fares);
     }
 }

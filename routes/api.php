@@ -33,8 +33,6 @@ Route::middleware(['jwt-auth'])->group(function () {
     Route::put('/ticket/{ticket}',[TicketController::class, 'replace'])->name('ticket.replace');
 });
 
-
-
 // Route::get('/ticket/trashed',[TicketController::class, 'trashed'])->middleware('auth:sanctum')->name('ticket_trashed');
 // Route::apiResource('/ticket',TicketController::class)->middleware('auth:sanctum')->names('ticket');
 // Route::post('/ticket/trashed/restore/{id}',[TicketController::class, 'restore'])->middleware('auth:sanctum')->name('ticket_trashed_restore');
